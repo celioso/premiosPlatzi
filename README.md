@@ -452,3 +452,75 @@ def vote(request, question_id):
     return HttpResponse(f"Estás votando a la pregunta número{question_id}")
 
 ```
+
+### Elevando el error 404
+
+vamos al archivo `views.py`  y en `detail` modificamos y importamos `get_object_or_404` como  lo muestra el codigo:
+```python
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+
+from .models import Question
+
+def index(request):
+    latest_question_list = Question.objects.all()
+    return render(request,"polls/index.html", {
+        "latest_question_list": latest_question_list
+    })
+
+def detail(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, "polls/detail.html",{
+        "question": question
+    } )
+
+def result(request, question_id):
+    return HttpResponse(f"Estas viendo los resultados de la pregunta número {question_id}")
+
+def vote(request, question_id):
+    return HttpResponse(f"Estás votando a la pregunta número{question_id}")
+```
+luego creamos el archivo `detail.html` en la carpeta `templates\polls ` y agregamos el siguiente código:
+```html
+<h1>{{question.question_text}}</h1>
+<ul>
+    {% for choice in question.choice_set.all %}
+        <li>{{ choice.choice_text }}</li>
+    {% endfor %}
+</ul>
+```
+### Formularios: lo básico
+trabajamos en el archivo `detail.py` y usamos el siguiente código:
+```html
+<form action="{% url 'polls:vote' question.id %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>{{ question.question_text}}</h1></legend>
+    {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
+    {% for choice in question.choice_set.all %}
+        <input 
+            type="radio"
+            name="choice"
+            id="choice{{ forloop.counter }}" 
+            value="{{ choice.id }}"      
+        >
+        <label for="choice{{ forloop.counter }}">
+            {{ choice.choice_text }}
+        </label>
+        <br>
+    {% endfor %}
+</fieldset>
+<input type="submit" value="Votar">
+</form>
+
+
+<!--<h1>{{question.question_text}}</h1>
+<ul>
+    {% for choice in question.choice_set.all %}
+        <li>{{ choice.choice_text }}</li>
+    {% endfor %}
+</ul> -->
+```
+
