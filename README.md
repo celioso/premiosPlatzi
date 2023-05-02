@@ -1,12 +1,6 @@
 # **Curso Básico de Django**
 [![](https://crowdbotics.ghost.io/content/images/2019/05/django.png)](http://https://crowdbotics.ghost.io/content/images/2019/05/django.png)
 
-# Editor.md
-
-![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
-
-![](https://img.shields.io/github/stars/pandao/editor.md.svg) ![](https://img.shields.io/github/forks/pandao/editor.md.svg) ![](https://img.shields.io/github/tag/pandao/editor.md.svg) ![](https://img.shields.io/github/release/pandao/editor.md.svg) ![](https://img.shields.io/github/issues/pandao/editor.md.svg) ![](https://img.shields.io/bower/v/editor.md.svg)
-
 - Instalar Django.
 1. Debemos crear la carpeta donde trabajaremos:` mkdir django_premiosplatzi`
 y nos dirigimos a la carpeta creada. 
