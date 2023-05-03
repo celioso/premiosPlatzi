@@ -52,7 +52,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 def index(request):
-    return HttpResponse("Hello world", 2+8)```
+    return HttpResponse("Hello world", 2+8)
+```
 
 Luego nos dirigimos a la carpeta `urls.py` de premiosplatziapp y le agregamos a urlpatterns un nuevo path.
 
@@ -63,7 +64,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("polls/", include("polls.urls"))
-]```
+]
+```
 Luego creamos la parpeta de `urls.py `en mi proyecto `polls`.
 
 y en el archivo agregamos el siguiente código:
@@ -74,7 +76,8 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index")
-]```
+]
+```
 
 Luego podemos agregar todos los archivos al `git con git add -A` y luego le damos un commit `git commit -a "Descripción"`
 
@@ -98,7 +101,8 @@ class Question(models.Model):
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
-    vptess = models.IntegerField(default=0)```
+    vptess = models.IntegerField(default=0)
+```
 
 Luego nos dirigimos a la carpeta **premiosplatziapp** al archivo `settings.py`Nota: este archivo es el principal de configuración del proyecto.
 
@@ -110,7 +114,8 @@ Luego ingresamos en la línea de comandos a la carpeta premiosplatziapp o donde 
  ```Python
  Migrations for 'polls':
   polls\migrations\0003_rename_vptess_choice_votes.py
-    - Rename field vptess on choice to votes```
+    - Rename field vptess on choice to votes
+  ```
  Luego el comando `py manage.py migrate`, lo que aplica todos los cambios que se ha realizado en el proyecto.
  
 ##### Nota
@@ -186,7 +191,8 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
 
     def __str__(self,): # metodo de choice_text
-        return self.choice_text```
+        return self.choice_text
+```
 
 para guardar los cambios volvemos a utilizar, nos salimos con `exit()`
 y usamos de nuevos `py manage.py makemigrations polls`
