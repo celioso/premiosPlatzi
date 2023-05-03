@@ -111,11 +111,11 @@ En el archivo agregado en la parte de `INSTALLED_APP` y agregamos `"polls.apps.P
 Luego ingresamos en la línea de comandos a la carpeta premiosplatziapp o donde esté el archivo manage.py e ingresamos el siguiente código:
  `py manage.py makemigrations polls`
  Lo cual nos muestra lo siguiente.
- ```python
- Migrations for 'polls':
-  polls\migrations\0003_rename_vptess_choice_votes.py
-    - Rename field vptess on choice to votes
-  ```
+ 
+ `Migrations for 'polls':`
+  `polls\migrations\0003_rename_vptess_choice_votes.py`
+    `- Rename field vptess on choice to votes`
+  
  Luego el comando `py manage.py migrate`, lo que aplica todos los cambios que se ha realizado en el proyecto.
  
 ##### Nota
