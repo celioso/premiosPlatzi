@@ -98,8 +98,7 @@ class Question(models.Model):
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
-    vptess = models.IntegerField(default=0)
-```
+    vptess = models.IntegerField(default=0)```
 
 Luego nos dirigimos a la carpeta **premiosplatziapp** al archivo `settings.py`Nota: este archivo es el principal de configuración del proyecto.
 
@@ -128,10 +127,10 @@ luego colocamos el siguiente comando `from polls.models import Question, Choice`
  `Question.objects.all()` para ingresar a todos los objetos que se han creado.
  Nos muestra:
   `<QuerySet [ ]>`
-  
+
   Para crear una pregunta se utiliza para  `from django.utils import timezone` para crear objetos tipo time.
   Para la pregunta usamos `q=Question(question_text="¿Cual es el mejor curso de platzi?" , pub_date= timezone.now())` y luego la guardamos con `q.save()`
-  
+
  otras formas de realizar este paso son:
 ` q  = Question.objects.create(question_text="¿Cuál es el mejor curso de platzi?" , pub_date=timezone.now())`
 
@@ -246,7 +245,8 @@ SELECT * FROM table WHERE field LIKE '%whatever';
 # contains
 SELECT * FROM table WHERE field LIKE '%whatever%';
 # endswith
-SELECT * WHERE headline LIKE '%Lennon';```
+SELECT * WHERE headline LIKE '%Lennon';
+```
 
 **link** : [http://https://docs.djangoproject.com/en/4.0/ref/models/querysets/#field-lookups](http://https://docs.djangoproject.com/en/4.0/ref/models/querysets/#field-lookups)
 
@@ -375,10 +375,11 @@ en visual en el programa `polls` creamos una nueva carpeta con el nombre `templa
 y creamos un archivo nuevo con index.html
 
 luego descargamos la extensión **Django**  y la instalamos, para que funcione el **shortcuts** de Django presionamos CTRL +SHIFP +  P y buscamos **settings.json**  y hacemos clip en** Open User settings(JSON)** y nos abre un archivo **JSON**  y agregamos el siguiente código 
-`"emmet.includeLanguages": {
+```python
+"emmet.includeLanguages": {
         "html": "django-html"
-    }`
-	
+    }```
+
 archivo JSON
 ```json
 {
@@ -398,8 +399,7 @@ archivo JSON
     "emmet.includeLanguages": {
         "html": "django-html"
     }
-}
-```
+}```
 si no realiza el **shortcuts** no dirigimos a la extensión de `django` lo deshabilitamos y lo recargamos y ya funciona el **shortcuts**
 
 Si no funciona utilizamos el siguiente código. 
@@ -675,7 +675,7 @@ class QuestionModelTests(TestCase):
 Luego regresamos a la shell y ejecutamos la prueba con el siguiente código `py manage.py test polls`, pero el método nos sigue arrojando true.
 
 ### **Solucionando el error encontrado**
-solo nos dirigimos a models.py y modificamos el siguiente código:
+solo nos dirigimos a `models.py` y modificamos el siguiente código:
 ```python
 def was_published_recently(self):
         return timezone.now() >= self.pub_date >= timezone.now() - datetime.timedelta(days=1)
