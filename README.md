@@ -292,7 +292,8 @@ y agregamos el sigiente codigo:
 from django.contrib import admin
 from .models import Question
 
-admin.site.register(Question)```
+admin.site.register(Question)
+```
 y luego de esto nos dirigimos al navegador al localhost http://127.0.0.1:8000/admin he ingresamos el usuario y el passwork 
 
 ![](https://tutorial.djangogirls.org/es/django_admin/images/login_page2.png) 
@@ -308,7 +309,8 @@ y agregamos el siguiente código:
 from django.contrib import admin
 from .models import Question
 
-admin.site.register(Question)```
+admin.site.register(Question)
+```
 y luego de esto nos dirigimos al navegador al localhost http://127.0.0.1:8000/admin e ingresamos el usuario y el passwork 
 
 ![](https://tutorial.djangogirls.org/es/django_admin/images/login_page2.png) 
@@ -347,7 +349,8 @@ def result(request, question_id):
     return HttpResponse(f"Estas viendo los resultados de la pregunta número {question_id}")
 
 def vote(request, question_id):
-    return HttpResponse(f"Estás votando a la pregunta número{question_id}")```
+    return HttpResponse(f"Estás votando a la pregunta número{question_id}")
+```
 
 luego para poderla visualizar, nos dirigimos al archivo urls.py ya agregamos los siguientes `path`
 
@@ -365,7 +368,8 @@ urlpatterns = [
     path("<int:question_id>/results/", views.result, name="result"),
     #ex: /polls/5/vote
     path("<int:question_id>/vote/", views.vote, name="vote"),
-]```
+]
+```
 para probar si todo funcionas nos dirigimos al siguiente link:
 Para  index:
 [Index](http://http://127.0.0.1:8000/polls/)
@@ -384,7 +388,8 @@ luego descargamos la extensión **Django**  y la instalamos, para que funcione e
 ```python
 "emmet.includeLanguages": {
         "html": "django-html"
-    }```
+    }
+```
 
 archivo JSON
 ```json
@@ -405,7 +410,8 @@ archivo JSON
     "emmet.includeLanguages": {
         "html": "django-html"
     }
-}```
+}
+```
 si no realiza el **shortcuts** no dirigimos a la extensión de `django` lo deshabilitamos y lo recargamos y ya funciona el **shortcuts**
 
 Si no funciona utilizamos el siguiente código. 
