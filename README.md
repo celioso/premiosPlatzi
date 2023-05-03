@@ -576,7 +576,7 @@ En el archivo `results.html`
     ¿Te gustaría votar de nuevo?
 </a>
 ```
-## ** CRUD**
+## CRUD
 C = Create
 R = Read
 U = Update
@@ -622,4 +622,247 @@ urlpatterns = [
     #ex: /polls/5/vote
     path("<int:question_id>/vote/", views.vote, name="vote"),
 ]
+```
+### Curso de Django Intermedio: Testing, Static Files, Django Admin
+
+#### **¿Qué son los tests?**
+Es una función que verifica que el código funciona correctamente
+
+#### **¿Por qué debería hacer tests?**
+Porque me permite evitar errores futuros a través de funciones que trabajan sobre las funciones principales de mi código.
+
+- Nos permite ver errores que a simple vista no hubiéramos visto.
+- Nos hace ver más profesionales.
+- Permite trabajar en equipo.
+
+#### **Test Driven Developer**
+TDD o Test-Driven Development (desarrollo dirigido por tests) es una práctica de programación que consiste en escribir primero las pruebas (generalmente unitarias), después escribir el código fuente que pase la prueba satisfactoriamente y, por último, refactorizar el código escrito.
+
+### Escribiendo nuestro primer test
+ingresamos a `menage.py ` en la carpeta de nuestro proyecto con el código `py manage.py shell` e implementamos los siguientes modulos en el **shell **
+```python
+import datetime
+from django.utils import timezone
+from polls.models import Question```
+
+después de cargas las modulos creamos nuestra pregunta:
+` q = Question(question_text="¿Quién es el mejor Course Director de Platzi?", pub_date=timezone.now()+ datetime.timedelta(days=30))`
+para ver la pregunta usamos el código `q.was_published_recently()`
+pero el método nos arroja true y debe arrojar false.
+Para corregir esto no dirigimos a la carpeta **poll** al archivo **tests.py**
+
+y agregamos este código para crear un **tests** nuevo usando el siguiente código:
+
+```python
+import datetime
+
+from django.test import TestCase
+from django.utils import timezone
+
+from .models import Question
+
+#se van a testear 
+# Models
+# Vistas
+class QuestionModelTests(TestCase):
+
+    def test_was_published_recently_with_future_questions(self):
+        """"was_published_recently return False for question whose pub_date is in the future"""
+        time = timezone.now() + datetime.timedelta(days=30)
+        future_question = Question(question_text="¿quién es el mejor Course de Platzi?", pub_date=time)
+        self.assertIs(future_question.was_published_recenttly(), False)```
+
+Luego regresamos a la shell y ejecutamos la prueba con el siguiente código `py manage.py test polls`, pero el método nos sigue arrojando true.
+
+### **Solucionando el error encontrado**
+solo nos dirigimos a models.py y modificamos el siguiente código:
+```python
+def was_published_recently(self):
+        return timezone.now() >= self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+```
+
+**Pasos a seguir para los tests**
+1. Identificamos un problema.
+2. Creamos un test.
+3. Corremos el test.
+4. Arreglamos el problema.
+5. Corremos el test.
+
+### Testing de Views
+
+para realizar el testing sobre los objetos y no aparezca las pregunta que se deben publicar a futuro usamos el siguiente código y solucionamos este problema.
+Nos dirigimos a `views.py` y agregamos el siguiente código:
+
+```python
+#importamos reverse
+from django.urls import reverse
+
+class IndexView(generic.ListView):
+    template_name = "polls/index.html"
+    context_object_name = "latest_question_list"
+
+    def get_queryset(self):
+        """Return the last five published question"""
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]```
+
+Luego creamos el testing.
+Para que no nos vuelva a suceder esto:
+```python
+class QuestionIndexViewTests(TestCase):
+    def test_no_questions(self):
+        """If not question exist, an appropiate message is displayed"""
+        response = self.client.get(reverse("polls:index"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No polls are available.")
+        self.assertQuerysetEqual(response.context["latest_question_list"], [])```
+
+Recordar que __lte me trae las preguntas presentes y del pasado, no las futuras.
+
+### Creando más tests para IndexView
+
+en el archivo polls ingresamos a testing y se crea lo siguiente 
+```python
+def create_question(question_text, days):
+    """
+    Create a question with the given "question_test", and published the given numbre of day offset to now (negative for question published in the past, positive for questions that have yet to be published)
+    """
+    time = timezone.now() + datetime.timedelta(days=days)
+    return Question.objects.create(question_text=question_text, pub_date=time)
+
+def test_future_question(self):
+        """
+        Question with a pub_date in the future aren't displayed on the index page.
+        """
+        create_question("Future question", days=30)
+        response = self.client.get(reverse("polls:index"))
+        self.assertContains(response, "No polls are available.")
+        self.assertQuerysetEqual(response.context["latest_question_list"],[])
+
+    def test_past_question(self):
+        """
+        Question wiht a pub_date in the past are displayed on the index page
+        """
+        question = create_question("Past question", days=-10)
+        response = self.client.get(reverse("polls:index"))
+        self.assertQuerysetEqual(response.context["latest_question_list"],[question])
+```
+### Ajustando detalles en los tests para IndexView
+
+con los siguientes código pasado, futuro y para dos preguntas pasadas y futuras:
+```python
+def test_future_question_and_past_question(self):
+        """
+        Even is both past and future question exist, only past question are displayed.
+        """
+        past_question= create_question(question_text="Past question", days=-30)
+        future_question= create_question(question_text="Future question", days=30)
+        response =self.client.get(reverse("polls:index"))
+        self.assertQuerysetEqual(
+            response.context["latest_question_list"],
+            [past_question]
+        )
+
+
+    def text_two_past_question(self):
+        """The questions index page may display multiple questions"""
+        past_question1= create_question(question_text="Past question 1", days=-30)
+        past_question2= create_question(question_text="Past question 2", days=-40)
+        response = self.client.get(reverse("polls:index"))
+        self.assertQuerysetEqual(
+            response.context["latest_question_list"],
+            [past_question1, past_question2]
+        )
+
+    def text_two_future_question(self):
+        """The questions index page may display multiple future questions"""
+        future_question1= create_question(question_text="Future question 1", days=50) 
+        future_question2= create_question(question_text="Future question 2", days=60)
+        response = self.client.get(reverse("polls:index"))
+        self.assertQuerysetEqual(
+            response.context["latest_question_list"],
+            [future_question1, future_question2]
+        )
+```
+### Creando tests para DetailView
+
+solo agregamos este código a testing:
+```python
+class QuestionDetailViewTests(TestCase):
+    def test_future_question(self):
+        """
+        The detail view of a question with a pub_date in the future return a 404 error not found
+        """
+        future_question = create_question(question_text="Future question",days=30)
+        url = reverse("polls:detail", args=(future_question.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_past_question(self):
+        """
+        The detail view of a question with a pub_date in the past displays the question's text
+        """
+        past_question = create_question(question_text="Past question",days=-30)
+        url = reverse("polls:detail", args=(past_question.id,))
+        response = self.client.get(url)
+        self.assertContains(response, past_question.question_text)
+```
+
+y en la parte de view alteramos DetailView:
+
+```python
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = "polls/detail.html"
+
+    def get_queryset(self):
+         """
+         Excludes any question that aren't published yet
+         """
+         return Question.objects.filter(pub_date__lte=timezone.now())
+```
+
+### gregando estilos a nuestro proyecto
+para crear loa estilos lo que se debe hacer es en el proyecto crear una nueva carpeta con el nombre **static** y dentro de ellla creamos otra con el nombre **polls**, se crea un archivo con el nombre  **style.css**, para probar usamos los siguiente.
+```css
+li a {
+    color: green;
+}
+```
+
+despues nos dirigimos al index de nuestro proyecto y linkiamos el archivo `style.css` que acabamos de crear.
+agregamos lo siguiente al inicio de nuestro html:
+```html 
+{% load static %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}"
+```
+### Añadiendo una imagen de fondo
+descargamos nuestra imagen que deseemos de fondo para nuestro proyecto buscamos una imagen, al guardarla en nuestro proyecto en la carpeta `premiosplatziapp/polls/static/polls` y aqui creaomos la creamos la carpeta `images`  y se guarda la imagen, luego creamos en el archivo style.css el código:
+```css
+body {
+	background: white url("images/background.gif") no-repeat;
+}
+```
+### Mejorando el Admin: Questions
+
+se cambia el orden de los campos del  modelos y como combinarlos campos del modelos, esto lo cambiamos en nuestro archivo admin.py y creamos lo siguiente:
+```python
+from django.contrib import admin
+from .models import Question, Choice
+
+class ChoiceInline(admin.StackedInline):
+    model = Choice
+    extra = 3
+class QuestionAdmin(admin.ModelAdmin):
+    fields = ["pub_date", "question_text"]
+    inlines = [ChoiceInline]
+
+admin.site.register(Question, QuestionAdmin)
+```
+### Mejorando el Admin: Change List
+
+en este punto le agregamos a la clase QuestionAdmin que son para filtrar las fechas y crear un buscador de preguntas y eso realiza con los siguiente:
+```python
+	list_display = ("question_text", "pub_date", "was_published_recently")
+    list_filter = ["pub_date"]
+    search_fields = ["question_text"]
 ```

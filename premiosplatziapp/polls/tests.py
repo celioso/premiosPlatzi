@@ -3,8 +3,11 @@ import datetime
 from django.test import TestCase
 from django.urls.base import reverse
 from django.utils import timezone
+from django.contrib import admin
+from django import forms
+from django.forms.models import BaseInlineFormSet
 
-from .models import Question
+from .models import Question,Choice
 
 #se van a testear 
 # Models
@@ -123,9 +126,10 @@ class QuestionDetailViewTests(TestCase):
         response = self.client.get(url)
         self.assertContains(response, past_question.question_text)
 
-#----------------------------------------------------------------------
+#testin th lilimc8384
+# Creando tests para DetailView
 
-from django.contrib import admin
+'''from django.contrib import admin
 from .models import Question,Choice
 from django import forms
 from django.forms.models import BaseInlineFormSet
@@ -160,4 +164,29 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Question, QuestionAdmin)
-#admin.site.register(Choice)
+#admin.site.register(Choice)'''
+
+#testing the briamex
+# toca crear un archivo nombrado froms.py
+'''
+from django.contrib import admin
+
+from .models import Question, Choice
+from .froms import RequiredInlineFormSet
+
+
+# Register your models here.
+class ChoiceInline(admin.TabularInline):
+    model = Choice
+    exclude = ['votes']
+    extra = 2
+    formset = RequiredInlineFormSet # or AtLeastOneFormSet
+
+class QuestionAdmin(admin.ModelAdmin):
+    inlines = [
+        ChoiceInline,
+    ]
+
+
+admin.site.register(Question, QuestionAdmin)
+admin.site.register(Choice)'''
