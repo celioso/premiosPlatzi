@@ -111,7 +111,7 @@ En el archivo agregado en la parte de `INSTALLED_APP` y agregamos `"polls.apps.P
 Luego ingresamos en la línea de comandos a la carpeta premiosplatziapp o donde esté el archivo manage.py e ingresamos el siguiente código:
  `py manage.py makemigrations polls`
  Lo cual nos muestra lo siguiente.
- ```Python
+ ```python
  Migrations for 'polls':
   polls\migrations\0003_rename_vptess_choice_votes.py
     - Rename field vptess on choice to votes
@@ -121,7 +121,7 @@ Luego ingresamos en la línea de comandos a la carpeta premiosplatziapp o donde 
 ##### Nota
  `py manage.py makemigrations polls` Crea un archivo `migration/001_initial-py` en el que django automáticamente describe toda la creación de las tablas en las BD, uso del concepto ORM
 
-`py manage.py migrate` Tomar el archivo creado y ejecutarlo en la BD. “Applying polls.001_initial”
+`py manage.py migrate` Tomar el archivo creado y ejecutarlo en la BD. `Applying polls.001_initia`
 
 ### **La consola interactiva de Django**
 
