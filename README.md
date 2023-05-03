@@ -52,7 +52,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 def index(request):
-    return HttpResponse("Hello world", 2+8)```
+    return HttpResponse("Hello world", 2+8)
+```
 
 Luego nos dirigimos a la carpeta `urls.py` de premiosplatziapp y le agregamos a urlpatterns un nuevo path.
 
@@ -63,7 +64,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("polls/", include("polls.urls"))
-]```
+]
+```
 Luego creamos la parpeta de `urls.py `en mi proyecto `polls`.
 
 y en el archivo agregamos el siguiente código:
@@ -74,7 +76,8 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index")
-]```
+]
+```
 
 Luego podemos agregar todos los archivos al `git con git add -A` y luego le damos un commit `git commit -a "Descripción"`
 
@@ -108,16 +111,17 @@ En el archivo agregado en la parte de `INSTALLED_APP` y agregamos `"polls.apps.P
 Luego ingresamos en la línea de comandos a la carpeta premiosplatziapp o donde esté el archivo manage.py e ingresamos el siguiente código:
  `py manage.py makemigrations polls`
  Lo cual nos muestra lo siguiente.
- ```Python
- Migrations for 'polls':
-  polls\migrations\0003_rename_vptess_choice_votes.py
-    - Rename field vptess on choice to votes```
+ 
+ `Migrations for 'polls':`
+  `polls\migrations\0003_rename_vptess_choice_votes.py`
+    `- Rename field vptess on choice to votes`
+  
  Luego el comando `py manage.py migrate`, lo que aplica todos los cambios que se ha realizado en el proyecto.
  
 ##### Nota
  `py manage.py makemigrations polls` Crea un archivo `migration/001_initial-py` en el que django automáticamente describe toda la creación de las tablas en las BD, uso del concepto ORM
 
-`py manage.py migrate` Tomar el archivo creado y ejecutarlo en la BD. “Applying polls.001_initial”
+`py manage.py migrate` Tomar el archivo creado y ejecutarlo en la BD. `Applying polls.001_initia`
 
 ### **La consola interactiva de Django**
 
@@ -128,10 +132,10 @@ luego colocamos el siguiente comando `from polls.models import Question, Choice`
  `Question.objects.all()` para ingresar a todos los objetos que se han creado.
  Nos muestra:
   `<QuerySet [ ]>`
-  
+
   Para crear una pregunta se utiliza para  `from django.utils import timezone` para crear objetos tipo time.
   Para la pregunta usamos `q=Question(question_text="¿Cual es el mejor curso de platzi?" , pub_date= timezone.now())` y luego la guardamos con `q.save()`
-  
+
  otras formas de realizar este paso son:
 ` q  = Question.objects.create(question_text="¿Cuál es el mejor curso de platzi?" , pub_date=timezone.now())`
 
@@ -187,7 +191,8 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
 
     def __str__(self,): # metodo de choice_text
-        return self.choice_text```
+        return self.choice_text
+```
 
 para guardar los cambios volvemos a utilizar, nos salimos con `exit()`
 y usamos de nuevos `py manage.py makemigrations polls`
@@ -246,7 +251,8 @@ SELECT * FROM table WHERE field LIKE '%whatever';
 # contains
 SELECT * FROM table WHERE field LIKE '%whatever%';
 # endswith
-SELECT * WHERE headline LIKE '%Lennon';```
+SELECT * WHERE headline LIKE '%Lennon';
+```
 
 **link** : [http://https://docs.djangoproject.com/en/4.0/ref/models/querysets/#field-lookups](http://https://docs.djangoproject.com/en/4.0/ref/models/querysets/#field-lookups)
 
@@ -286,7 +292,8 @@ y agregamos el sigiente codigo:
 from django.contrib import admin
 from .models import Question
 
-admin.site.register(Question)```
+admin.site.register(Question)
+```
 y luego de esto nos dirigimos al navegador al localhost http://127.0.0.1:8000/admin he ingresamos el usuario y el passwork 
 
 ![](https://tutorial.djangogirls.org/es/django_admin/images/login_page2.png) 
@@ -302,7 +309,8 @@ y agregamos el siguiente código:
 from django.contrib import admin
 from .models import Question
 
-admin.site.register(Question)```
+admin.site.register(Question)
+```
 y luego de esto nos dirigimos al navegador al localhost http://127.0.0.1:8000/admin e ingresamos el usuario y el passwork 
 
 ![](https://tutorial.djangogirls.org/es/django_admin/images/login_page2.png) 
@@ -341,7 +349,8 @@ def result(request, question_id):
     return HttpResponse(f"Estas viendo los resultados de la pregunta número {question_id}")
 
 def vote(request, question_id):
-    return HttpResponse(f"Estás votando a la pregunta número{question_id}")```
+    return HttpResponse(f"Estás votando a la pregunta número{question_id}")
+```
 
 luego para poderla visualizar, nos dirigimos al archivo urls.py ya agregamos los siguientes `path`
 
@@ -359,7 +368,8 @@ urlpatterns = [
     path("<int:question_id>/results/", views.result, name="result"),
     #ex: /polls/5/vote
     path("<int:question_id>/vote/", views.vote, name="vote"),
-]```
+]
+```
 para probar si todo funcionas nos dirigimos al siguiente link:
 Para  index:
 [Index](http://http://127.0.0.1:8000/polls/)
@@ -375,10 +385,12 @@ en visual en el programa `polls` creamos una nueva carpeta con el nombre `templa
 y creamos un archivo nuevo con index.html
 
 luego descargamos la extensión **Django**  y la instalamos, para que funcione el **shortcuts** de Django presionamos CTRL +SHIFP +  P y buscamos **settings.json**  y hacemos clip en** Open User settings(JSON)** y nos abre un archivo **JSON**  y agregamos el siguiente código 
-`"emmet.includeLanguages": {
+```python
+"emmet.includeLanguages": {
         "html": "django-html"
-    }`
-	
+    }
+```
+
 archivo JSON
 ```json
 {
@@ -675,7 +687,7 @@ class QuestionModelTests(TestCase):
 Luego regresamos a la shell y ejecutamos la prueba con el siguiente código `py manage.py test polls`, pero el método nos sigue arrojando true.
 
 ### **Solucionando el error encontrado**
-solo nos dirigimos a models.py y modificamos el siguiente código:
+solo nos dirigimos a `models.py` y modificamos el siguiente código:
 ```python
 def was_published_recently(self):
         return timezone.now() >= self.pub_date >= timezone.now() - datetime.timedelta(days=1)
